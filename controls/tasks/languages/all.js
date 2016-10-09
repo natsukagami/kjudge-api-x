@@ -3,5 +3,7 @@
  */
 
 module.exports = [
-	require('./cpp') // C++
+	require('./cpp'), // C++
+	require('./pascal'), // Pascal
+	require('./java')
 ];
