@@ -56,7 +56,7 @@ ${submission.id}...`);
 	let promise = Promise.resolve()
 	.then(() => {
 		jobDir = path.join('/tmp', randomstring());
-		return TaskFs.mkdir(jobDir);
+		return TaskFs.mkdir(jobDir, 2);
 	})
 	.then(() => {
 		return Promise.all([

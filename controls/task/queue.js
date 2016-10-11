@@ -75,7 +75,7 @@ class Heap {
 	 * @param {Number} priority The priority of the item.
 	 * @return {None}
 	 */
-	push(item, priority) {
+	push(item, priority = -1) {
 		this.arr.push({
 			item: item,
 			priority: priority
