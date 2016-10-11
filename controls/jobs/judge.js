@@ -13,9 +13,10 @@ const JobScoring = require('./scoring');
 /**
  * Judges a submission
  * @param  {Submission} submission The submission to be judged.
+ * @param  {Number}     priority   The priority of the submission.
  * @return {Promise<Object>}       The result object.
  */
-module.exports = function jobJudge(submission) {
+module.exports = function jobJudge(submission, priority = 0) {
 	let submissionLanguage = null;
 	let problem = submission.problem;
 	debug(`Judging submission ${submission.id} for problem ${problem.displayName}`);
@@ -31,7 +32,7 @@ module.exports = function jobJudge(submission) {
 			submissionFolder: submission.folder,
 			problemFolder: problem.folder,
 			useGrader: problem.useGrader
-		});
+		}, priority + 1);
 	})
 	.then(() => {
 		// Run tests
@@ -41,7 +42,7 @@ module.exports = function jobJudge(submission) {
 				submission: submission,
 				language: submissionLanguage,
 				testId: id
-			});
+			}, priority + id / 100);
 		}));
 	})
 	.then(res => {

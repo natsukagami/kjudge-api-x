@@ -47,7 +47,7 @@ module.exports = function testRun({
 	submission,
 	language,
 	testId
-}) {
+}, priority = 0) {
 	debug(`Running test ${testId} of problem ${problem.displayName} for submission \
 ${submission.id}...`);
 	let test = problem.tests[testId];
@@ -56,19 +56,19 @@ ${submission.id}...`);
 	let promise = Promise.resolve()
 	.then(() => {
 		jobDir = path.join('/tmp', randomstring());
-		return TaskFs.mkdir(jobDir, 2);
+		return TaskFs.mkdir(jobDir, priority + 2);
 	})
 	.then(() => {
 		return Promise.all([
 			TaskFs.copy(
 				test.inputFile,
 				path.join(jobDir, 'input.txt'),
-				2
+				priority + 2
 			),
 			TaskFs.copy(
 				path.resolve(submission.folder) + path.sep + '.',
 				jobDir,
-				2
+				priority + 2
 			)
 		]);
 	})
@@ -78,7 +78,7 @@ ${submission.id}...`);
 			submissionFolder: jobDir,
 			timeLimit: problem.timeLimit,
 			memoryLimit: problem.memoryLimit
-		}, RUN_PRIORITY);
+		}, RUN_PRIORITY + priority);
 	})
 	.then(res => {
 		if (res.status !== 'OK') return res;
@@ -86,14 +86,14 @@ ${submission.id}...`);
 			return TaskFs.copy(
 				test.outputFile,
 				path.join(jobDir, 'answer.txt'),
-				6
+				priority + 6
 			).then(() => {
 				return TaskComparators.comparatorCompare({
 					problemFolder: problem.folder,
 					input: path.join(jobDir, 'input.txt'),
 					output: path.join(jobDir, 'output.txt'),
 					answer: path.join(jobDir, 'answer.txt')
-				});
+				}, priority + 7);
 			}).then(diff => {
 				res.status = diff;
 				return res;
@@ -101,7 +101,8 @@ ${submission.id}...`);
 		else
 			return TaskComparators.diffCompare(
 				path.join(jobDir, 'output.txt'),
-				test.outputFile
+				test.outputFile,
+				priority + 7
 			).then(diff => {
 				res.status = diff;
 				return res;

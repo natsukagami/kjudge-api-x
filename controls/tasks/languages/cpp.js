@@ -28,9 +28,8 @@ module.exports = {
 	compile(problemName, {
 		submissionFolder,
 		problemFolder,
-		useGrader = false,
-		priority = Defaults.COMPILE_TASK_PRIORITY
-	}) {
+		useGrader = false
+	}, priority = Defaults.COMPILE_TASK_PRIORITY) {
 		let args = ['-s', '-std=c++11', '-static', '-lm', '-o', problemName,
 			`${problemName}.cpp`];
 		if (useGrader) args.push(path.join(problemFolder, 'grader.cpp'));
@@ -51,9 +50,8 @@ module.exports = {
 	 * @return {Promise<string>}         The compile task, with compiler warnings.
 	 */
 	comparatorCompile({
-		problemFolder,
-		priority = Defaults.COMPILE_TASK_PRIORITY
-	}) {
+		problemFolder
+	}, priority = Defaults.COMPILE_TASK_PRIORITY) {
 		return Queue.push(new Task({
 			command: 'g++',
 			args: ['-s', '-std=c++11', '-static', '-lm', '-o', 'compare',

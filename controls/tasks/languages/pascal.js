@@ -28,9 +28,8 @@ module.exports = {
 	compile(problemName, {
 		submissionFolder,
 		problemFolder,
-		useGrader = false,
-		priority = Defaults.COMPILE_TASK_PRIORITY
-	}) {
+		useGrader = false
+	}, priority = Defaults.COMPILE_TASK_PRIORITY) {
 		let args = ['-O2', `${problemName}.pas`];
 		if (useGrader) args.push(path.join(problemFolder, 'grader.pas'));
 		return Queue.push(new Task({
@@ -50,9 +49,8 @@ module.exports = {
 	 * @return {Promise<string>}         The compile task, with compiler warnings.
 	 */
 	comparatorCompile({
-		problemFolder,
-		priority = Defaults.COMPILE_TASK_PRIORITY
-	}) {
+		problemFolder
+	}, priority = Defaults.COMPILE_TASK_PRIORITY) {
 		return Queue.push(new Task({
 			command: 'fpc',
 			args: ['-O2', 'compare.pas'],

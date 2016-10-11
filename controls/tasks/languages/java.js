@@ -28,9 +28,8 @@ module.exports = {
 	compile(problemName, {
 		submissionFolder,
 		problemFolder,
-		useGrader = false,
-		priority = Defaults.COMPILE_TASK_PRIORITY
-	}) {
+		useGrader = false
+	}, priority = Defaults.COMPILE_TASK_PRIORITY) {
 		let args = ['--main=Main', '-O3', '-o', problemName, `${problemName}.java`];
 		if (useGrader)
 			args = ['--main=grader', '-O3', '-o', problemName, `${problemName}.java`,
@@ -52,9 +51,8 @@ module.exports = {
 	 * @return {Promise<string>}         The compile task, with compiler warnings.
 	 */
 	comparatorCompile({
-		problemFolder,
-		priority = Defaults.COMPILE_TASK_PRIORITY
-	}) {
+		problemFolder
+	}, priority = Defaults.COMPILE_TASK_PRIORITY) {
 		return Queue.push(new Task({
 			command: 'gcj',
 			args: ['--main=Main', '-O3', '-o', 'compare', 'compare.java'],
