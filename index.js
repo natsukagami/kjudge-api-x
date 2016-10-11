@@ -9,7 +9,7 @@ const Test = require('./controls/models/test');
 const JobJudge = require('./controls/jobs/judge');
 
 module.exports = function({
-	isolateDirectory = '/var/lib/isolate'
+	isolateDirectory = process.env.ISOLATE || '/var/lib/isolate'
 } = {}) {
 	require('./controls/tasks/runner/isolate').DIRECTORY_DIR = isolateDirectory;
 	return {
