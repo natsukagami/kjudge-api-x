@@ -62,11 +62,13 @@ ${submission.id}...`);
 		return Promise.all([
 			TaskFs.copy(
 				test.inputFile,
-				path.join(jobDir, 'input.txt')
+				path.join(jobDir, 'input.txt'),
+				2
 			),
 			TaskFs.copy(
 				path.resolve(submission.folder) + path.sep + '.',
-				jobDir
+				jobDir,
+				2
 			)
 		]);
 	})

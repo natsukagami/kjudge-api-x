@@ -10,7 +10,7 @@ const Queue = require('../task/queue');
  * All fs-related tasks defaultly take the lowest non-zero priority.
  * @type {Number}
  */
-const FS_QUEUE_PRIORITY = 1;
+const FS_QUEUE_PRIORITY = 0;
 
 module.exports = {
 	/**

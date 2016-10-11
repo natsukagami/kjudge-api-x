@@ -18,7 +18,7 @@ module.exports = {
 	 * The default task priority
 	 * @type {Number}
 	 */
-	COMPILE_TASK_PRIORITY: 2,
+	COMPILE_TASK_PRIORITY: 1,
 	CompileError: CompileError,
 	NoLanguageFoundError: NoLanguageFoundError
 };
