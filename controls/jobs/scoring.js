@@ -12,7 +12,7 @@ function fullVerdict(code) {
 	return {
 		'RE': 'Runtime Error',
 		'SG': 'Killed by Signal (Memory Limit Exceeded?)',
-		'TLE': 'Time Limit Exceeded',
+		'TO': 'Time Limit Exceeded',
 		'MLE': 'Memory Limit Exceeded'
 	}[code];
 }
