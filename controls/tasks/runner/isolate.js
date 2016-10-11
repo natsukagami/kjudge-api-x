@@ -93,13 +93,13 @@ function runTask(boxId, {
 			'-m', memoryLimit.toString(),
 			'-i', path.join(boxDir, 'env', 'input.txt'),
 			'-o', path.join(boxDir, 'env', 'output.txt'),
-			'-M', path.join(boxDir, 'meta.txt'),
+			'-M', path.join(submissionFolder, 'meta.txt'),
 			path.join(boxDir, 'env', runCommand)
 		]
 	}), priority).then((res) => {
 		debug(`isolate says "${res.stderr}"`);
 		// Extract meta.txt
-		return fs.readFileAsync(path.join(boxDir, 'meta.txt'), 'utf-8');
+		return fs.readFileAsync(path.join(submissionFolder, 'meta.txt'), 'utf-8');
 	}).then(meta => {
 		// Get meta information
 		let opt = { };
