@@ -10,7 +10,7 @@ const JobJudge = require('./controls/jobs/judge');
 
 module.exports = function({
 	isolateDirectory = '/var/lib/isolate'
-}) {
+} = {}) {
 	require('./controls/tasks/runner/isolate').DIRECTORY_DIR = isolateDirectory;
 	return {
 		Problem: Problem,
