@@ -96,8 +96,8 @@ function runTask(boxId, {
 			'-M', path.join(boxDir, 'meta.txt'),
 			path.join(boxDir, 'env', runCommand)
 		]
-	}), priority).then(() => {
-		// if (res.exitCode !== 0) return Promise.reject(new Error(res.stderr));
+	}), priority).then((res) => {
+		debug(`isolate says "${res.stderr}"`);
 		// Extract meta.txt
 		return fs.readFileAsync(path.join(boxDir, 'meta.txt'), 'utf-8');
 	}).then(meta => {
