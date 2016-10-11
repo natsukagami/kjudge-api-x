@@ -162,7 +162,7 @@ class TaskQueue {
  * The number of tasks available for running
  * @type {Number}
  */
-TaskQueue.concurrency = require('os').cpus().length - 2;
+TaskQueue.concurrency = Math.max(1, require('os').cpus().length - 2);
 
 const queue = new TaskQueue();
 
