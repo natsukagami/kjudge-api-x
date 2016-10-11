@@ -43,7 +43,8 @@ function sumScoring(results, tests) {
 				runningTime: res.runningTime,
 				memoryUsed: res.memoryUsed,
 				score: 0,
-				verdict: fullVerdict(res.status)
+				verdict: fullVerdict(res.status),
+				signal: res.status
 			});
 		}
 		obj.maxScore += tests[id].score;
@@ -88,7 +89,8 @@ function groupMinScoring(results, scoringDetails) {
 					runningTime: res.runningTime,
 					memoryUsed: res.memoryUsed,
 					score: 0,
-					verdict: fullVerdict(res.status)
+					verdict: fullVerdict(res.status),
+					signal: res.status
 				});
 			}
 		}
@@ -136,7 +138,8 @@ function groupMulScoring(results, scoringDetails) {
 					runningTime: res.runningTime,
 					memoryUsed: res.memoryUsed,
 					score: 0,
-					verdict: fullVerdict(res.status)
+					verdict: fullVerdict(res.status),
+					signal: res.status
 				});
 			}
 		}
