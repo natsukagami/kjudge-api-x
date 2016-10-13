@@ -78,5 +78,22 @@ module.exports = {
 			if (res.exitCode === 0) return Promise.resolve();
 			return Promise.reject(new Error(res.stderr));
 		});
+	},
+	/**
+	 * Chmods a file / folder.
+	 * @param  {string}    source   The file / folder link.
+	 * @param  {string}    mode     The new permission.
+	 * @param  {Number}    priority The priority of the task.
+	 * @return {Promise<>}          The chmod task.
+	 */
+	chmod(source, mode, priority = FS_QUEUE_PRIORITY) {
+		return Queue.push(new Task({
+			command: 'chmod',
+			args: ['-R', mode, source]
+		}), priority).then((res) => {
+			debug(`Chmodding '${source}' to '${mode}' done with status ${res.exitCode}.`);
+			if (res.exitCode === 0) return Promise.resolve();
+			return Promise.reject(new Error(res.stderr));
+		});
 	}
 };

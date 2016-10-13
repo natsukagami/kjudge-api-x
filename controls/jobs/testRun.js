@@ -70,7 +70,9 @@ ${submission.id}...`);
 				jobDir,
 				priority + 2
 			)
-		]);
+		]).then(() => {
+			return TaskFs.chmod(jobDir, '777', priority + 2);
+		});
 	})
 	.then(() => {
 		return TaskRunner.run({
