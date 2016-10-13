@@ -30,7 +30,7 @@ module.exports = {
 		problemFolder,
 		useGrader = false
 	}, priority = Defaults.COMPILE_TASK_PRIORITY) {
-		let args = ['-s', '-std=c++11', '-static', '-lm', '-o', problemName,
+		let args = ['-O2', '-s', '-std=c++11', '-static', '-lm', '-o', problemName,
 			`${problemName}.cpp`];
 		if (useGrader) args.push(path.join(problemFolder, 'grader.cpp'));
 		return Queue.push(new Task({
@@ -54,7 +54,7 @@ module.exports = {
 	}, priority = Defaults.COMPILE_TASK_PRIORITY) {
 		return Queue.push(new Task({
 			command: 'g++',
-			args: ['-s', '-std=c++11', '-static', '-lm', '-o', 'compare',
+			args: ['-O2', '-s', '-std=c++11', '-static', '-lm', '-o', 'compare',
 				'compare.cpp'],
 			cwd: problemFolder
 		}), priority).then(res => {
