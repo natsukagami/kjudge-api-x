@@ -90,7 +90,7 @@ function runTask(boxId, {
 			'--run',
 			`--dir=${path.join(boxDir, 'env')}=${submissionFolder}:rw`,
 			'-t', (timeLimit / 1000).toString(),
-			'-w', (timeLimit / 1000 + 500).toString(),
+			'-w', (timeLimit / 1000 + 0.5).toString(),
 			'-m', memoryLimit.toString(),
 			'-i', path.join(boxDir, 'env', 'input.txt'),
 			'-o', path.join(boxDir, 'env', 'output.txt'),
