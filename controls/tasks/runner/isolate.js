@@ -90,6 +90,7 @@ function runTask(boxId, {
 			'--run',
 			`--dir=${path.join(boxDir, 'env')}=${submissionFolder}:rw`,
 			'-t', (timeLimit / 1000).toString(),
+			'-w', (timeLimit / 1000 + 500).toString(),
 			'-m', memoryLimit.toString(),
 			'-i', path.join(boxDir, 'env', 'input.txt'),
 			'-o', path.join(boxDir, 'env', 'output.txt'),
@@ -110,7 +111,7 @@ function runTask(boxId, {
 		return opt;
 	}).then(info => {
 		return {
-			runningTime: Number(info.time) * 1000,
+			runningTime: (Number(info['time-wall'] || info.time)) * 1000,
 			memoryUsed: Number(info['cg-mem']),
 			status: info.status || 'OK'
 		};
