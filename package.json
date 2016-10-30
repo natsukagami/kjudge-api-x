@@ -1,6 +1,6 @@
 {
   "name": "kjudge-api-x",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "An API for Competitve Programming judge.",
   "main": "index.js",
   "scripts": {
