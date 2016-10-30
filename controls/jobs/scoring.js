@@ -53,12 +53,15 @@ function sumScoring(results, tests) {
 }
 
 /**
- * Scores a submission, with 'groupMin' scoringMode
+ * Scores a submission, that multiplies the whole subtask (group)'s score with
+ * a calculated ratio that defaults at 1 and is updated through updFunc
+
  * @param  {[Object]}           results        Test results
  * @param  {[[Number, Number]]} scoringDetails How groups are divided and scored
+ * @param  {Function}           updFunc        The ratio update function (oldRatio, score) => Number
  * @return {Object}                            Score
  */
-function groupMinScoring(results, scoringDetails) {
+function groupedRatioScoring(results, scoringDetails, updFunc) {
 	let obj = {
 		score: 0,
 		maxScore: 0,
@@ -76,7 +79,7 @@ function groupMinScoring(results, scoringDetails) {
 		for (let i = 0; i < num; ++i, ++cur) {
 			let res = results[cur];
 			if (typeof res.status !== 'string') {
-				ratio = Math.min(ratio, res.status.score);
+				ratio = updFunc(ratio, res.status.score);
 				sub.tests.push({
 					runningTime: res.runningTime,
 					memoryUsed: res.memoryUsed,
@@ -102,52 +105,23 @@ function groupMinScoring(results, scoringDetails) {
 }
 
 /**
+ * Scores a submission, with 'groupMin' scoringMode
+ * @param  {[Object]}           results        Test results
+ * @param  {[[Number, Number]]} scoringDetails How groups are divided and scored
+ * @return {Object}                            Score
+ */
+function groupMinScoring(results, scoringDetails) {
+	return groupedRatioScoring(results, scoringDetails, Math.min);
+}
+
+/**
  * Scores a submission, with 'groupMul' scoringMode
  * @param  {[Object]}           results        Test results
  * @param  {[[Number, Number]]} scoringDetails How groups are divided and scored
  * @return {Object}                            Score
  */
 function groupMulScoring(results, scoringDetails) {
-	let obj = {
-		score: 0,
-		maxScore: 0,
-		tests: []
-	};
-	let cur = 0;
-	scoringDetails.forEach(([num, total]) => {
-		obj.maxScore += total;
-		let sub = {
-			score: 0,
-			maxScore: total,
-			tests: []
-		};
-		let ratio = 1.0;
-		for (let i = 0; i < num; ++i, ++cur) {
-			let res = results[cur];
-			if (typeof res.status !== 'string') {
-				ratio *= res.status.score;
-				sub.tests.push({
-					runningTime: res.runningTime,
-					memoryUsed: res.memoryUsed,
-					score: res.status.score,
-					verdict: res.status.comment
-				});
-			} else {
-				ratio = 0;
-				sub.tests.push({
-					runningTime: res.runningTime,
-					memoryUsed: res.memoryUsed,
-					score: 0,
-					verdict: fullVerdict(res.status),
-					signal: res.status
-				});
-			}
-		}
-		sub.score = total * ratio;
-		obj.score += sub.score;
-		obj.tests.push(sub);
-	});
-	return obj;
+	return groupedRatioScoring(results, scoringDetails, (oldRatio, score) => oldRatio * score);
 }
 
 /**
