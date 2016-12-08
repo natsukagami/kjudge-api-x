@@ -6,6 +6,7 @@ const path = require('path');
 const Task = require('../../task/task');
 const Queue = require('../../task/queue');
 const Defaults = require('./defaults');
+const Fs = require('../fs');
 
 module.exports = {
 	/**
@@ -32,15 +33,25 @@ module.exports = {
 	}, priority = Defaults.COMPILE_TASK_PRIORITY) {
 		let args = ['-O2', '-s', '-std=c++11', '-static', '-lm', '-o', problemName,
 			`${problemName}.cpp`];
-		if (useGrader) args.push(path.join(problemFolder, 'grader.cpp'));
-		return Queue.push(new Task({
-			command: 'g++',
-			args: args,
-			cwd: submissionFolder
-		}), priority).then(res => {
-			if (res.exitCode === 0) return Promise.resolve(res.stderr);
-			return Promise.reject(new Defaults.CompileError(res.stderr));
-		});
+		if (useGrader) args.push('grader.cpp');
+		return Promise.resolve()
+		.then(() => {
+			if (!useGrader) return;
+			return Promise.all([
+				Fs.copy(path.join(problemFolder, 'grader.cpp'), path.join(submissionFolder, 'grader.cpp'), priority + 1),
+				Fs.copy(path.join(problemFolder, 'grader.h'), path.join(submissionFolder, 'grader.h'), priority + 1),
+			]);
+		})
+		.then(() => {
+			return Queue.push(new Task({
+				command: 'g++',
+				args: args,
+				cwd: submissionFolder
+			}), priority).then(res => {
+				if (res.exitCode === 0) return Promise.resolve(res.stderr);
+				return Promise.reject(new Defaults.CompileError(res.stderr));
+			});
+		})
 	},
 	/**
 	 * Creates a compile task for comparator
