@@ -1,7 +1,9 @@
 /**
  * Provides a queue implementation for Task Scheduling
  * Supports handling multiple tasks, with priority order.
+ * @module Task/Queue
  */
+
 const debug = require('debug')('kjudge:task:queue');
 
 /**

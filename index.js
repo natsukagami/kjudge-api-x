@@ -1,13 +1,12 @@
-/**
- * Index file. This file lives for only one purpose: Expose the whole package to
- * the wild.
- */
-
 const Problem = require('./controls/models/problem');
 const Submission = require('./controls/models/submission');
 const Test = require('./controls/models/test');
 const JobJudge = require('./controls/jobs/judge');
 
+/*
+ * Sets any configurations and return the main module.
+ * Or, one can call the main modules from the exports object itself.
+ */
 module.exports = function({
 	isolateDirectory = process.env.ISOLATE || '/var/lib/isolate'
 } = {}) {
@@ -19,6 +18,11 @@ module.exports = function({
 		Judge: JobJudge
 	};
 };
+
+module.exports.Problem = Problem;
+module.exports.Submission = Submission;
+module.exports.Test = Test;
+module.exports.Judge = JobJudge;
 
 // let problem = new Problem({
 // 	name: 'kcon',

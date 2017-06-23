@@ -1,0 +1,57 @@
+syntax = "proto3";
+package worker;
+
+message Compilation {
+	string Source     = 1;
+	string Grader     = 2;
+	string Header     = 3;
+	string HeaderName = 4;
+}
+
+message CompileResult {
+	string Executable = 1;
+	bool   Success    = 2;
+	string Stderr     = 3;
+}
+
+message Testrun {
+	string Executable = 1;
+	string Input      = 2;
+	string Output     = 3;
+	double Time       = 4;
+	double Mem        = 5;
+	string Compare    = 6;
+}
+
+message TestResult {
+	string Verdict = 1;
+	double Score   = 2;
+	double Time    = 3;
+	double Mem     = 4;
+}
+
+message Empty {
+
+}
+
+message Shard {
+	int32 ID = 1;
+}
+
+message Usage {
+	double cpuTime  = 1;
+	int64  memUsed  = 2;
+	int64  memTotal = 3;
+}
+
+service Worker {
+	rpc Compile(Compilation) returns (CompileResult) { }
+	rpc Run(Testrun)         returns (TestResult)    { }
+	rpc GetShard(Empty)      returns (Shard)         { }
+	rpc SysUsage(Empty)      returns (stream Usage)  { }
+}
+
+service Pool {
+	rpc Compile(Compilation) returns (CompileResult)   { }
+	rpc Run(Testrun)         returns (TestResult)      { }
+}

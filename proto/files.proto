@@ -1,0 +1,20 @@
+syntax = "proto3";
+package pb;
+
+message Digest {
+	string str = 1;
+}
+
+message Meta {
+	Digest digest = 1;
+}
+
+message File {
+	Meta meta = 1;
+	bytes content = 2;
+}
+
+service Files {
+	rpc Download(Digest) returns (File) {}
+	rpc Upload(File) returns (Digest) {}
+}

@@ -10,6 +10,8 @@ const LangDefaults = require('../tasks/languages/defaults');
 const JobTest = require('./testRun');
 const JobScoring = require('./scoring');
 
+const server = require('../kjudge-server');
+
 /**
  * Judges a submission
  * @param  {Submission} submission The submission to be judged.
@@ -21,36 +23,47 @@ module.exports = function jobJudge(submission, priority = 0) {
 	let problem = submission.problem;
 	debug(`Judging submission ${submission.id} for problem ${problem.displayName}`);
 	let promise = Promise.resolve()
-	.then(() => {
+		.then(() => {
 		// Get the submission's language
-		return submission.getLanguage();
-	})
-	.then(lang => {
-		// Compile it
-		submissionLanguage = lang;
-		return lang.compile(problem.name, {
-			submissionFolder: submission.folder,
-			problemFolder: problem.folder,
-			useGrader: problem.useGrader
-		}, priority + 1);
-	})
-	.then(() => {
+			return submission.getLanguage();
+		})
+		.then(lang => {
+			// Compile it
+			// submissionLanguage = lang;
+			// return lang.compile(problem.name, {
+			// 	submissionFolder: submission.folder,
+			// 	problemFolder: problem.folder,
+			// 	useGrader: problem.useGrader
+			// }, priority + 1);
+			return server.compile(problem.name, {
+				submissionFolder: submission.folder,
+				problemFolder: problem.folder,
+				useGrader: problem.useGrader
+			});
+		})
+		.then((exeDigest) => {
 		// Run tests
-		return Promise.all(problem.tests.map((item, id) => {
-			return JobTest({
-				problem: problem,
-				submission: submission,
-				language: submissionLanguage,
-				testId: id
-			}, priority + id / 100);
-		}));
-	})
-	.then(res => {
-		return JobScoring(submission, res);
-	})
-	.catch(LangDefaults.CompileError, err => {
-		return 'Compile Error: \n' + err.message;
-	});
+			return Promise.all(problem.tests.map((item, id) => {
+				// return JobTest({
+				// 	problem: problem,
+				// 	submission: submission,
+				// 	language: submissionLanguage,
+				// 	testId: id
+				// }, priority + id / 100);
+				return server.testrun({
+					problem: problem,
+					submission: submission,
+					executable: exeDigest,
+					testId: id
+				});
+			}));
+		})
+		.then(res => {
+			return JobScoring(submission, res);
+		})
+		.catch(LangDefaults.CompileError, err => {
+			return 'Compile Error: \n' + err.message;
+		});
 	promise.finally(() => {
 		debug(`Done submission ${submission.id} for problem ${problem.displayName}`);
 	});

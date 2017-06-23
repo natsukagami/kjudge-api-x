@@ -1,23 +1,24 @@
-/**
+/*
  * Control - Task
  * Task serves as the unit level operation of kjudge-api-x. A task is actually a
  * direct fork from node.js to Linux programs (and others e.g isolate).
  * Performing a task is actually forking the outside program and then fetch its
  * results.
  */
+
 const debug = require('debug');
 const Promise = require('bluebird');
 const childProcess = require('child_process');
 
 /**
- * Class Task
+ * A common external command wrapper that runs and returns a command's output.
  */
 class Task {
 	/**
 	 * Task Constructor
 	 * @param {string}   command The command to be executed
-	 * @param {[string]} args    The list of arguments to be executed. Defaults
-	 * to nothing
+	 * @param {string[]} args    The list of arguments to be executed. Defaults to
+	 * nothing
 	 * @param {string}   cwd     Current working directory. Defaults to the kjudge
 	 * process.
 	 */
@@ -29,7 +30,7 @@ class Task {
 		this.command = command;
 		/**
 		 * The list of arguments of the command.
-		 * @type {[string]}
+		 * @type {string[]}
 		 */
 		this.args = args;
 		/**
@@ -43,18 +44,17 @@ class Task {
 		 */
 		this.id = ++Task.Index;
 		/**
-		 * A debug function, made specifically for the task
-		 * @type {(string) => void}
+		 * @method A debug function, made specifically for the task
+		 * @param {string} message
 		 */
 		this.debug = debug(`kjudge:task:${this.id}`);
 	}
 	/**
-	 * @method run
 	 * Runs the task
-	 * @return {Promise<Object>}
-	 *  @property {string} stdout   The output of the task
-	 *  @property {string} stderr   The error stream of the task
-	 *  @property {Number} exitCode The exit code of the program
+	 * @return {Promise.<Object>}
+	 * @property {string} stdout   The output of the task
+	 * @property {string} stderr   The error stream of the task
+	 * @property {Number} exitCode The exit code of the program
 	 */
 	run() {
 		return new Promise((resolve) => {

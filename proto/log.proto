@@ -1,0 +1,35 @@
+syntax = "proto3";
+package logging;
+
+// Defines the logging service.
+service Logging {
+	rpc print(Log) returns (Reply) {}
+	rpc fetch(Count) returns (Logs) {}
+}
+
+// The number of logs one wants to receive.
+message Count {
+	int32 count = 1;
+}
+
+// Log represents a log.
+message Log {
+	string sender = 1;
+	string message = 2;
+	enum Severity {
+		DEBUG = 0;
+		INFO = 1;
+		FATAL = 2;
+	}
+	Severity severity = 3;
+	int64 time = 4;
+}
+
+// Logs represents an array of logs.
+message Logs {
+	repeated Log logs = 1;
+}
+
+message Reply {
+
+}
