@@ -7,13 +7,13 @@ const util = require('util');
 const debug = require('debug')('kjudge:server_api');
 const LangDefaults = require('./tasks/languages/defaults');
 
-const FilesClient = require('./proto/files_grpc_pb').FilesClient;
+const FilesClient = require('../proto/files_grpc_pb').FilesClient;
 const filesClient = new FilesClient(
 	'localhost:25001',
 	grpc.credentials.createInsecure()
 );
 
-const PoolClient = require('./proto/worker_grpc_pb').PoolClient;
+const PoolClient = require('../proto/worker_grpc_pb').PoolClient;
 const poolClient = new PoolClient(
 	'localhost:25002',
 	grpc.credentials.createInsecure()
